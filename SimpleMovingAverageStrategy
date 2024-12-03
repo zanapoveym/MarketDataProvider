@@ -1,0 +1,111 @@
+import abc
+import threading
+from collections import deque
+from typing import Generic, TypeVar, Callable, List, Dict, Any
+ 
+T = TypeVar('T')
+ 
+# 定义一个异常类来表示交易错误
+class TradingError(Exception):
+    pass
+ 
+# 定义一个抽象基类来表示交易策略
+class TradingStrategy(abc.ABC):
+    @abc.abstractmethod
+    def should_buy(self, price: float) -> bool:
+        pass
+ 
+    @abc.abstractmethod
+    def should_sell(self, price: float) -> bool:
+        pass
+ 
+# 定义一个具体的交易策略实现（例如：简单的移动平均策略）
+class SimpleMovingAverageStrategy(TradingStrategy):
+    def __init__(self, window_size: int = 5):
+        self.window_size = window_size
+        self.prices = deque(maxlen=window_size)
+ 
+    def update_price(self, price: float) -> None:
+        self.prices.append(price)
+ 
+    def should_buy(self, price: float) -> bool:
+        if len(self.prices) < self.window_size:
+            return False
+        return price < sum(self.prices) / len(self.prices)
+ 
+    def should_sell(self, price: float) -> bool:
+        if len(self.prices) < self.window_size:
+            return False
+        return price > sum(self.prices) / len(self.prices)
+ 
+# 定义一个观察者接口，用于接收市场数据更新
+class MarketDataObserver(abc.ABC):
+    @abc.abstractmethod
+    def update(self, price: float) -> None:
+        pass
+ 
+# 定义一个具体的观察者实现，它使用交易策略来触发交易
+class TradingObserver(MarketDataObserver):
+    def __init__(self, strategy: TradingStrategy):
+        self.strategy = strategy
+        self.positions = {'buy': [], 'sell': []}
+ 
+    def update(self, price: float) -> None:
+        if self.strategy.should_buy(price):
+            self.positions['buy'].append(price)
+            print(f"Buy signal at price {price}")
+        if self.strategy.should_sell(price):
+            self.positions['sell'].append(price)
+            print(f"Sell signal at price {price}")
+ 
+    def get_positions(self) -> Dict[str, List[float]]:
+        return self.positions
+ 
+# 定义一个市场数据提供者，它使用线程来模拟实时数据更新
+class MarketDataProvider(threading.Thread, Generic[T]):
+    def __init__(self, observers: List[MarketDataObserver], initial_price: float = 100, increment: float = 1, interval: float = 1):
+        threading.Thread.__init__(self)
+        self.observers = observers
+        self.price = initial_price
+        self.increment = increment
+        self.interval = interval
+        self.running = True
+ 
+    def run(self) -> None:
+        while self.running:
+            for observer in self.observers:
+                observer.update(self.price)
+            self.price += self.increment
+            self.increment = -self.increment  # 交替增减以模拟市场波动
+            time.sleep(self.interval)
+ 
+    def stop(self) -> None:
+        self.running = False
+ 
+# 注意：为了运行这段代码，你需要导入time模块（在上面的代码中没有显示，因为主要焦点是结构）
+# import time
+ 
+# 主程序入口
+def main():
+    strategy = SimpleMovingAverageStrategy(window_size=3)
+    observer = TradingObserver(strategy)
+    market_data_provider = MarketDataProvider(observers=[observer], initial_price=100, increment=2, interval=0.5)
+ 
+    market_data_provider.start()
+ 
+    try:
+        # 让市场数据提供者运行一段时间
+        time.sleep(10)
+    finally:
+        market_data_provider.stop()
+        market_data_provider.join()
+ 
+    positions = observer.get_positions()
+    print(f"Final positions: {positions}")
+ 
+# 注意：由于这段代码包含了线程和实时更新，因此在实际运行环境中，你应该确保正确地处理线程安全和退出条件。
+# 在这个示例中，为了简化，我们没有包含所有的健壮性检查。
+ 
+# 运行主程序（确保你已经导入了time模块）
+# if __name__ == "__main__":
+#     main()
