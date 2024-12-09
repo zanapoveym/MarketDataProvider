@@ -1,0 +1,28 @@
+use std::thread;
+
+fn process_data(data: Vec<i32>) -> i32 {
+    data.iter().sum()
+}
+
+fn main() {
+    let data_chunks = vec![
+        vec![1, 2, 3, 4, 5],
+        vec![6, 7, 8, 9, 10],
+        vec![11, 12, 13, 14, 15],
+    ];
+
+    let mut handles = vec![];
+
+    for chunk in data_chunks {
+        let handle = thread::spawn(move || process_data(chunk));
+        handles.push(handle);
+    }
+
+    let mut results = vec![];
+    for handle in handles {
+        results.push(handle.join().unwrap());
+    }
+
+    let total: i32 = results.iter().sum();
+    println!("Total sum: {}", total);
+}
