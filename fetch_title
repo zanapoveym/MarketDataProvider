@@ -1,0 +1,25 @@
+import requests
+from bs4 import BeautifulSoup
+from concurrent.futures import ThreadPoolExecutor
+
+urls = [
+    'https://www.python.org', 
+    'https://www.wikipedia.org', 
+    'https://www.github.com',
+    'https://www.stackoverflow.com'
+]
+
+def fetch_title(url):
+    try:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        title = soup.title.string
+        return f"{url}: {title}"
+    except Exception as e:
+        return f"{url}: Failed to fetch ({e})"
+
+with ThreadPoolExecutor(max_workers=4) as executor:
+    results = executor.map(fetch_title, urls)
+
+for result in results:
+    print(result)
