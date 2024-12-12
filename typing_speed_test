@@ -1,0 +1,22 @@
+import time
+import random
+
+def typing_speed_test():
+    words = ["python", "programming", "challenge", "speed", "accuracy", "typing", "keyboard", "performance"]
+    random.shuffle(words)
+    print("Typing Test: Type the following words as fast as you can.")
+    print("Words:", ", ".join(words))
+    
+    input("Press Enter to start...")
+
+    start_time = time.time()
+    for word in words:
+        user_input = input(f"Type '{word}': ")
+        while user_input != word:
+            print("Incorrect, try again.")
+            user_input = input(f"Type '{word}': ")
+
+    elapsed_time = time.time() - start_time
+    print(f"\nYou typed all words correctly in {elapsed_time:.2f} seconds.")
+
+typing_speed_test()
