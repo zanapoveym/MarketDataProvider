@@ -1,0 +1,14 @@
+def decimal_to_binary(decimal):
+    return bin(decimal)[2:]
+
+def binary_to_decimal(binary):
+    return int(binary, 2)
+
+# Example usage
+num = 42
+binary_representation = decimal_to_binary(num)
+print(f"Decimal {num} in binary is {binary_representation}")
+
+binary_num = '101010'
+decimal_representation = binary_to_decimal(binary_num)
+print(f"Binary {binary_num} in decimal is {decimal_representation}")
