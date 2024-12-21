@@ -1,0 +1,12 @@
+#!/bin/bash
+
+OUTPUT_FILE="cpu_usage.log"
+echo "Monitoring CPU usage. Press Ctrl+C to stop."
+
+while true; do
+    TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+    CPU_USAGE=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
+    echo "$TIMESTAMP - CPU Usage: $CPU_USAGE%" >> $OUTPUT_FILE
+    echo "Logged: $TIMESTAMP - CPU Usage: $CPU_USAGE%"
+    sleep 5
+done
