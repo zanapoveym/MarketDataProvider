@@ -1,0 +1,34 @@
+import java.util.Random;
+
+public class MazeGenerator {
+    private static final int WIDTH = 10;
+    private static final int HEIGHT = 10;
+    private static final char WALL = '#';
+    private static final char PATH = '.';
+
+    public static void main(String[] args) {
+        char[][] maze = generateMaze(WIDTH, HEIGHT);
+        printMaze(maze);
+    }
+
+    private static char[][] generateMaze(int width, int height) {
+        char[][] maze = new char[height][width];
+        Random random = new Random();
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                maze[i][j] = random.nextBoolean() ? WALL : PATH;
+            }
+        }
+        return maze;
+    }
+
+    private static void printMaze(char[][] maze) {
+        for (char[] row : maze) {
+            for (char cell : row) {
+                System.out.print(cell);
+            }
+            System.out.println();
+        }
+    }
+}
