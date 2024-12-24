@@ -1,0 +1,21 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = htmlspecialchars($_POST['name']);
+    $message = htmlspecialchars($_POST['message']);
+    file_put_contents('messages.txt', "$name: $message\n", FILE_APPEND);
+}
+
+$messages = file('messages.txt');
+?>
+<form method="post">
+    Name: <input type="text" name="name"><br>
+    Message: <textarea name="message"></textarea><br>
+    <input type="submit" value="Send">
+</form>
+
+<h2>Messages:</h2>
+<ul>
+    <?php foreach ($messages as $msg): ?>
+        <li><?= $msg ?></li>
+    <?php endforeach; ?>
+</ul>
