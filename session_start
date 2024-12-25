@@ -1,0 +1,16 @@
+<?php
+session_start();
+
+if ($_POST['username'] == 'admin' && $_POST['password'] == '1234') {
+    $_SESSION['user'] = 'admin';
+    echo "Login successful!";
+} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo "Invalid credentials!";
+}
+?>
+
+<form method="post">
+    Username: <input type="text" name="username"><br>
+    Password: <input type="password" name="password"><br>
+    <input type="submit" value="Login">
+</form>
