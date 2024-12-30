@@ -1,0 +1,11 @@
+### 4. **随机诗句生成器**
+import random
+
+lines = [
+    "The sky whispers secrets of dawn",
+    "Moonlight dances on the lake",
+    "Stars sing lullabies at night",
+    "Mountains stand in silent pride"
+]
+
+print(random.choice(lines))
