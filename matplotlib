@@ -1,0 +1,11 @@
+import matplotlib.pyplot as plt
+
+# 简单路径规划示例
+start = (0, 0)
+goal = (10, 10)
+
+plt.plot([start[0], goal[0]], [start[1], goal[1]], marker='o')
+plt.title("Simple Path Planning")
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.show()
