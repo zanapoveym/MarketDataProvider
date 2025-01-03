@@ -1,0 +1,6 @@
+import magenta.music as mm
+
+sequence = mm.NoteSequence()
+sequence.notes.add(pitch=60, start_time=0, end_time=1, velocity=80)
+sequence.notes.add(pitch=62, start_time=1, end_time=2, velocity=80)
+print(sequence)
