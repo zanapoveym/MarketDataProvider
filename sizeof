@@ -1,0 +1,15 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int arr[] = {10, 20, 5, 50, 30};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int maxVal = arr[0];
+
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > maxVal) maxVal = arr[i];
+    }
+
+    cout << "数组中的最大值是: " << maxVal << endl;
+    return 0;
+}
