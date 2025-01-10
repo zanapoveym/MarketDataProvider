@@ -1,0 +1,14 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main() {
+    srand(time(0)); // 初始化随机种子
+
+    for (int i = 0; i < 5; i++) {
+        cout << "骰子点数: " << rand() % 6 + 1 << endl; // 生成1到6之间的随机数
+    }
+
+    return 0;
+}
