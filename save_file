@@ -1,0 +1,16 @@
+import tkinter as tk
+from tkinter import filedialog
+
+def save_file():
+    text = text_box.get("1.0", tk.END)
+    with filedialog.asksaveasfile(mode="w", defaultextension=".txt") as file:
+        file.write(text)
+
+root = tk.Tk()
+root.title("Simple Notepad")
+text_box = tk.Text(root, wrap=tk.WORD)
+text_box.pack(expand=True, fill=tk.BOTH)
+menu = tk.Menu(root)
+menu.add_command(label="Save", command=save_file)
+root.config(menu=menu)
+root.mainloop()
