@@ -1,0 +1,18 @@
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+def preorder_traversal(node):
+    if not node:
+        return
+    print(node.value, end=" ")
+    preorder_traversal(node.left)
+    preorder_traversal(node.right)
+
+# 示例
+root = TreeNode(1)
+root.left = TreeNode(2)
+root.right = TreeNode(3)
+preorder_traversal(root)
