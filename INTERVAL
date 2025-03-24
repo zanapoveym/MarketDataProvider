@@ -1,0 +1,3 @@
+SELECT order_id, customer_name, order_date 
+FROM orders 
+WHERE order_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY);
