@@ -1,0 +1,19 @@
+import magenta
+import note_seq
+from note_seq.protobuf import music_pb2
+
+def generate_melody():
+    melody = music_pb2.NoteSequence()
+    notes = [60, 62, 64, 65, 67, 69, 71, 72]
+    for i, pitch in enumerate(notes):
+        note = melody.notes.add()
+        note.pitch = pitch
+        note.start_time = i * 0.5
+        note.end_time = (i + 1) * 0.5
+        note.velocity = 80
+    melody.total_time = len(notes) * 0.5
+    note_seq.play_sequence(melody, synth=note_seq.fluidsynth)
+    return melody
+
+melody = generate_melody()
+print("生成的旋律：", melody)
