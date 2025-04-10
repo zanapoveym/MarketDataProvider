@@ -1,0 +1,39 @@
+package main
+
+import (
+    "github.com/gorilla/websocket"
+    "net/http"
+)
+
+var clients = make(map[*websocket.Conn]bool)
+var broadcast = make(chan string)
+
+func handleConnections(w http.ResponseWriter, r *http.Request) {
+    upgrader := websocket.Upgrader{}
+    conn, _ := upgrader.Upgrade(w, r, nil)
+    clients[conn] = true
+
+    for {
+        _, msg, err := conn.ReadMessage()
+        if err != nil {
+            delete(clients, conn)
+            break
+        }
+        broadcast <- string(msg)
+    }
+}
+
+func handleMessages() {
+    for {
+        msg := <-broadcast
+        for client := range clients {
+            client.WriteMessage(websocket.TextMessage, []byte(msg))
+        }
+    }
+}
+
+func main() {
+    http.HandleFunc("/ws", handleConnections)
+    go handleMessages()
+    http.ListenAndServe(":8080", nil)
+}
