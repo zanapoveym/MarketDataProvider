@@ -1,0 +1,10 @@
+#!/bin/bash
+WATCH_DIR="./src"
+COMMAND="node server.js"
+
+while true; do
+  inotifywait -r -e modify,create,delete $WATCH_DIR
+  echo "Change detected. Restarting..."
+  pkill -f "$COMMAND"
+  $COMMAND &
+done
